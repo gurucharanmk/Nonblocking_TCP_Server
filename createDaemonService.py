@@ -3,7 +3,8 @@
 #Author:Gurucharan MK
 
 
-import os
+import os, sys, stat
+
 
 initScriptTemplate = '''#!/bin/bash
 
@@ -100,15 +101,17 @@ exit $?
 '''
 
 
-execName = 'NnoBlockingTCPServer'
+execName = 'NonBlockingTCPServer'
 
 completePath = os.path.join(os.getcwd(), execName)
 initScriptTemplateMod = initScriptTemplate.replace(r'<PATH_TO_EXEC>', completePath)
-
+  
 initScriptFile = file('NonBlockingTCPServ_D', 'w')
 initScriptFile.write(initScriptTemplateMod)
+initScriptFile.close()
 
 os.system('sudo cp NonBlockingTCPServ_D /etc/init.d/')
-os.system('sudo chmod +x /etc/init.d/NonBlockingTCPServ_D')
+os.system('sudo chmod +rx /etc/init.d/NonBlockingTCPServ_D')
+ 
 os.system('sudo update-rc.d NonBlockingTCPServ_D defaults')
 
