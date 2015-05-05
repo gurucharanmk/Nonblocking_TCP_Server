@@ -32,7 +32,7 @@ static void onRead(struct bufferevent *bev, void *ctx) {
     bzero((char *) &ret, sizeof(ret));
     strcpy(ret, "BadRequest");
     
-    if (strncmp (buff, "GETMESSAGE", len - 1) == 0){
+    if (memcmp (buff, "GETMESSAGE", len - 1) == 0){
         //printf("Closing !!!! \n");
         bzero((char *) &ret, sizeof(ret));
         strcpy(ret, "The message is ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWX");
@@ -42,7 +42,7 @@ static void onRead(struct bufferevent *bev, void *ctx) {
     /* Write data */
     bufferevent_write(bev, ret, strlen(ret));
     
-    if (strncmp (buff, "BYE", strlen(buff) - 1) == 0){
+    if (memcmp (buff, "BYE", strlen(buff) - 1) == 0){
         //printf("Closing !!!! \n");
         //ret = "CLOSING CONNECTION";
       bufferevent_free(bev);
@@ -65,7 +65,7 @@ static void onAccept(struct evconnlistener *lev, evutil_socket_t fd,
     struct sockaddr *sa, int socklen, void *ctx) {
     struct event_base *evbase = ctx;
     struct bufferevent *bev;
-    struct timeval tv;
+    
  
      bev = bufferevent_socket_new(evbase, fd, BEV_OPT_CLOSE_ON_FREE);
     if (bev == NULL) {
@@ -103,7 +103,7 @@ int main(int argc, char *argv[]){
     memset(&sin, 0, sizeof(sin));
     sin.sin_family = AF_INET;
     sin.sin_addr.s_addr = inet_addr(SVR_IP);
-    sin.sin_port = htons(SVR_PORT);
+    sin.sin_port = htons(port);
  
     
     lev = evconnlistener_new_bind(evbase, onAccept, evbase,
